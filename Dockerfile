@@ -6,41 +6,44 @@
 # For information on the phusion baseimage
 # Refer: https://phusion.github.io/baseimage-docker/
 #
+# This file makes use of contributions from Rafal Szkup, Application Engineer, UoA
+# and the iNZight Team, UoA
+#
 # ---------------------------------------------
 
-FROM phusion/baseimage:0.9.17
+# start with a light-weight base image
+FROM debian:jessie
 
 MAINTAINER "Science IS Team" ws@sit.auckland.ac.nz
 
-# set environment variables
-ENV SHINY_VERSION http://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.3.0.403-amd64.deb
+# Add the CRAN PPA to get all versions of R and install base R and required packages
+# install shiny server and clean up all downloaded files to make sure the image remains lean as much as possible
+# NOTE: we group a lot of commands together to reduce the number of layers that Docker creates in building this image
 
-# Add the CRAN PPA to get all versions of R and install base R
-RUN echo 'deb http://cran.stat.auckland.ac.nz/bin/linux/ubuntu trusty/' > /etc/apt/sources.list.d/cranppa.list \
-    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 \
-    && apt-get -y update \
-    && apt-get -y install --no-install-recommends \
-    r-base \
-    libcurl4-openssl-dev \
-    libxml2-dev \
-    gdebi-core \
-    wget \
-    make \
-    gcc \
-    g++ \
-    git
-
-# download and install shiny server
-RUN wget --no-verbose -O shiny-server.deb ${SHINY_VERSION} \
-    && gdebi -n shiny-server.deb \
-    && rm -f shiny-server.deb
-
-# install R packages
-RUN R -e "install.packages(c('rmarkdown', 'devtools', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library', dependencies=T)" \
-    && R -e "devtools::install_github('ramnathv/rCharts')"
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
+    && echo "deb http://cran.stat.auckland.ac.nz/bin/linux/debian jessie-cran3/" | tee -a /etc/apt/sources.list.d/R.list \
+    && apt-get update \
+    && apt-get install -y -q \
+        r-base-core \
+        libcurl4-openssl-dev \
+        libxml2-dev \
+        libssl-dev \
+        libssl1.0.0 \
+        sudo \
+        wget \
+    && wget --no-verbose -O libssl.deb http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb \
+    && dpkg -i libssl.deb \
+    && rm -f libssl.deb \
+    && R -e "install.packages(c('rmarkdown', 'devtools', 'shiny', 'DT', 'GGally'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
+    && R -e "devtools::install_github('ramnathv/rCharts')" \
+    && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.4.0.756-amd64.deb \
+    && dpkg -i shiny-server.deb \
+    && rm -f shiny-server.deb \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && sed -i '1s/^/access_log \/var\/log\/shiny-server\/access.log default; \n/' /etc/shiny-server/shiny-server.conf
 
 # expose ports
 EXPOSE 3838
 
-# Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
+CMD ["sudo", "-u", "shiny", "/usr/bin/shiny-server"]
