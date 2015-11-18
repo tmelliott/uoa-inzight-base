@@ -18,10 +18,12 @@ ENV SHINY_VERSION http://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-
 # Add the CRAN PPA to get all versions of R and install base R
 RUN echo 'deb http://cran.stat.auckland.ac.nz/bin/linux/ubuntu trusty/' > /etc/apt/sources.list.d/cranppa.list \
     && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 \
-    && apt-get -y update
+    && apt-get -y update \
     && apt-get -y install --no-install-recommends \
     r-base \
-    dpkg \
+    libcurl4-openssl-dev \
+    libxml2-dev \
+    gdebi-core \
     wget \
     make \
     gcc \
@@ -30,11 +32,11 @@ RUN echo 'deb http://cran.stat.auckland.ac.nz/bin/linux/ubuntu trusty/' > /etc/a
 
 # download and install shiny server
 RUN wget --no-verbose -O shiny-server.deb ${SHINY_VERSION} \
-    && dpkg -i shiny-server.deb \
+    && gdebi -n shiny-server.deb \
     && rm -f shiny-server.deb
 
 # install R packages
-RUN R -e "install.packages(c('rmarkdown', 'devtools', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
+RUN R -e "install.packages(c('rmarkdown', 'devtools', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library', dependencies=T)" \
     && R -e "devtools::install_github('ramnathv/rCharts')"
 
 # expose ports
