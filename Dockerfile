@@ -36,6 +36,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
     && rm -f libssl.deb \
     && R -e "install.packages(c('rmarkdown', 'devtools', 'shiny', 'DT', 'GGally'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
     && R -e "devtools::install_github('ramnathv/rCharts')" \
+    && R -e "install.packages(c('iNZightMR', 'iNZightTS', 'iNZightRegression', 'iNZightPlots'), repos = c('http://docker.stat.auckland.ac.nz/R', 'http://cran.stat.auckland.ac.nz'))" \
     && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.4.0.756-amd64.deb \
     && dpkg -i shiny-server.deb \
     && rm -f shiny-server.deb \
@@ -46,4 +47,6 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
 # expose ports
 EXPOSE 3838
 
-CMD ["sudo", "-u", "shiny", "/usr/bin/shiny-server"]
+# since this forms the base image, we do NOT intend to start any process
+# treat this like abstract class :)
+
