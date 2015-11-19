@@ -42,7 +42,6 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
     && rm -f shiny-server.deb \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-    && sed -i '1s/^/access_log \/var\/log\/shiny-server\/access.log default; \n/' /etc/shiny-server/shiny-server.conf
 
 # expose ports
 EXPOSE 3838
