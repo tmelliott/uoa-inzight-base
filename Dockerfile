@@ -34,9 +34,8 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
     && wget --no-verbose -O libssl.deb http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb \
     && dpkg -i libssl.deb \
     && rm -f libssl.deb \
-    && R -e "install.packages(c('rmarkdown', 'devtools', 'shiny', 'DT', 'GGally'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
+    && R -e "install.packages(c('rmarkdown', 'devtools', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
     && R -e "devtools::install_github('ramnathv/rCharts')" \
-    && R -e "install.packages(c('iNZightMR', 'iNZightTS', 'iNZightRegression', 'iNZightPlots'), repos = c('http://docker.stat.auckland.ac.nz/R', 'http://cran.stat.auckland.ac.nz'))" \
     && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.4.0.756-amd64.deb \
     && dpkg -i shiny-server.deb \
     && rm -f shiny-server.deb \
