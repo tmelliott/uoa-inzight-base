@@ -35,6 +35,8 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
     && R -e "install.packages(c('rmarkdown', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
     && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.4.0.756-amd64.deb \
     && dpkg -i shiny-server.deb \
+    && touch /var/log/shiny-server.log \
+    && chown shiny.shiny /var/log/shiny-server.log \
     && rm -f shiny-server.deb \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -42,5 +44,6 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
 # expose ports
 EXPOSE 3838
 
-# since this forms the base image, we do NOT intend to start any process
-# treat this like abstract class :)
+# startup shiny server listening on Port 3838
+CMD["sudo -u shiny /usr/bin/shiny-server # >> /var/log/shiny-server.log 2>&1"]
+
