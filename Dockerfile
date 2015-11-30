@@ -20,6 +20,8 @@ MAINTAINER "Science IS Team" ws@sit.auckland.ac.nz
 # install shiny server and clean up all downloaded files to make sure the image remains lean as much as possible
 # NOTE: we group a lot of commands together to reduce the number of layers that Docker creates in building this image
 
+COPY shiny-server.sh /usr/bin/
+
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
     && echo "deb http://cran.stat.auckland.ac.nz/bin/linux/debian jessie-cran3/" | tee -a /etc/apt/sources.list.d/R.list \
     && apt-get update \
@@ -35,8 +37,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
     && R -e "install.packages(c('rmarkdown', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
     && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.4.0.756-amd64.deb \
     && dpkg -i shiny-server.deb \
-    && touch /var/log/shiny-server.log \
-    && chown shiny.shiny /var/log/shiny-server.log \
+    && chmod +x /usr/bin/shiny-server.sh \
     && rm -f shiny-server.deb \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -45,5 +46,4 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
 EXPOSE 3838
 
 # startup shiny server listening on Port 3838
-CMD["sudo -u shiny /usr/bin/shiny-server # >> /var/log/shiny-server.log 2>&1"]
-
+CMD ["/usr/bin/shiny-server.sh"]
