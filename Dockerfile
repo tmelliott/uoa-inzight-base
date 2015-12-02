@@ -3,9 +3,6 @@
 # Dockerfile best practices
 # Refer: http://docs.docker.com/engine/articles/dockerfile_best-practices/
 #
-# For information on the phusion baseimage
-# Refer: https://phusion.github.io/baseimage-docker/
-#
 # This file makes use of contributions from Rafal Szkup, Application Engineer, UoA
 # and the iNZight Team, UoA
 #
@@ -15,6 +12,8 @@
 FROM debian:jessie
 
 MAINTAINER "Science IS Team" ws@sit.auckland.ac.nz
+
+ENV BUILD_DATE "2015-12-03"
 
 # Add the CRAN PPA to get all versions of R and install base R and required packages
 # install shiny server and clean up all downloaded files to make sure the image remains lean as much as possible
