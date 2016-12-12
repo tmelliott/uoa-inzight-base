@@ -34,7 +34,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
     && dpkg -i libssl.deb \
     && rm -f libssl.deb \
     && R -e "install.packages(c('rmarkdown', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
-    && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.4.0.756-amd64.deb \
+    && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.5.1.834-amd64.deb \
     && dpkg -i shiny-server.deb \
     && chmod +x /opt/shiny-server.sh \
     && rm -f shiny-server.deb \
