@@ -28,6 +28,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
         r-base-core \
         libssl-dev \
         libssl1.0.0 \
+        libxml2-dev \
         sudo \
         wget \
     && wget --no-verbose -O libssl.deb http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb \
