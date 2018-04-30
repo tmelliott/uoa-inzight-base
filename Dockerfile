@@ -30,6 +30,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FCAE2A0E115C3D8A \
         libssl1.0.0 \
         libxml2-dev \
         libcairo2-dev \
+        libxt-dev \
         sudo \
         wget \
     && wget --no-verbose -O libssl.deb https://mirrors.mediatemple.net/debian-archive/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb \
