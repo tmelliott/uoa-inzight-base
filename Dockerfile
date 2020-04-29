@@ -34,7 +34,6 @@ RUN apt-get update && apt-get install -y gnupg2\
         libxml2-dev\ 
         libssh-4 libssh-dev \
         libcurl4-openssl-dev\
-        libcurl4-gnutls-dev \
         sudo \
         wget \
     && R -e "install.packages(c('rmarkdown', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
