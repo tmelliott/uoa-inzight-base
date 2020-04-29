@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y gnupg2\
         libssl1.1 \
         lsb-release \
         libxml2-dev\ 
-        LibSSH2 \
+        libssh-4 libssh-dev \
         libcurl4-openssl-dev\
         libcurl4-gnutls-dev \
         sudo \
