@@ -9,7 +9,7 @@
 # ---------------------------------------------
 
 # start with a light-weight base image
-FROM debian:jessie
+FROM debian:buster 
 
 MAINTAINER "Science IS Team" ws@sit.auckland.ac.nz
 
@@ -21,11 +21,10 @@ ENV BUILD_DATE "2015-12-03"
 
 COPY shiny-server.sh /opt/
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
-    && echo "deb http://cran.stat.auckland.ac.nz/bin/linux/debian jessie-cran3/" | tee -a /etc/apt/sources.list.d/R.list \
+RUN echo "deb http://cloud.r-project.org/bin/linux/debian buster-cran40/" | tee -a /etc/apt/sources.list.d/R.list \
     && apt-get update \
     && apt-get install -y -q \
-        r-base-core \
+        -t buster-cran40 r-base\
         libssl-dev \
         libssl1.0.0 \
         sudo \
@@ -34,7 +33,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 381BA480 \
     && dpkg -i libssl.deb \
     && rm -f libssl.deb \
     && R -e "install.packages(c('rmarkdown', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
-    && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-12.04/x86_64/shiny-server-1.4.0.756-amd64.deb \
+    && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.13.944-amd64.deb \
     && dpkg -i shiny-server.deb \
     && chmod +x /opt/shiny-server.sh \
     && rm -f shiny-server.deb \
