@@ -27,9 +27,14 @@ RUN apt-get update && apt-get install -y gnupg2\
     && apt-get update \
     && apt-get install -y -q \
         -t buster-cran40 r-base\
+        build-essential\
         libssl-dev \
         libssl1.1 \
         lsb-release \
+        libxml2-dev\ 
+        LibSSH2 \
+        libcurl4-openssl-dev\
+        libcurl4-gnutls-dev \
         sudo \
         wget \
     && R -e "install.packages(c('rmarkdown', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
