@@ -31,9 +31,6 @@ RUN apt-get update && apt-get install -y gnupg2\
         libssl1.1 \
         sudo \
         wget \
-    && wget --no-verbose -O libssl.deb http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb \
-    && dpkg -i libssl.deb \
-    && rm -f libssl.deb \
     && R -e "install.packages(c('rmarkdown', 'shiny', 'DT'), repos='http://cran.rstudio.com/', lib='/usr/lib/R/site-library')" \
     && wget --no-verbose -O shiny-server.deb https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.13.944-amd64.deb \
     && dpkg -i shiny-server.deb \
