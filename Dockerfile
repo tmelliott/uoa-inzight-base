@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y gnupg2\
     && apt-get install -y -q \
         -t buster-cran40 r-base\
         libssl-dev \
-        libssl1.0.0 \
+        libssl1.1 \
         sudo \
         wget \
     && wget --no-verbose -O libssl.deb http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb \
