@@ -21,7 +21,8 @@ ENV BUILD_DATE "2015-12-03"
 
 COPY shiny-server.sh /opt/
 
-RUN echo "deb http://cloud.r-project.org/bin/linux/debian buster-cran40/" | tee -a /etc/apt/sources.list.d/R.list \
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FCAE2A0E115C3D8A \
+    && echo "deb http://cloud.r-project.org/bin/linux/debian buster-cran40/" | tee -a /etc/apt/sources.list.d/R.list \
     && apt-get update \
     && apt-get install -y -q \
         -t buster-cran40 r-base\
